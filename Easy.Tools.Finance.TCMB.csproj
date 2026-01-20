@@ -43,7 +43,6 @@
 		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 		<LangVersion>latest</LangVersion>
 
-
 	</PropertyGroup>
 
 	<ItemGroup>
