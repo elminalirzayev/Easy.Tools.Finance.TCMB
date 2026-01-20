@@ -27,9 +27,9 @@ jobs:
         shell: pwsh
         run: |
           Write-Host "##[group]List solution files"
-          Get-ChildItem -Filter *.sln
+          Get-ChildItem -Filter *.slnx
           Write-Host "##[endgroup]"
-          $slnFile = Get-ChildItem -Filter *.sln | Select-Object -First 1
+          $slnFile = Get-ChildItem -Filter *.slnx | Select-Object -First 1
           Write-Host "Solution file found: $($slnFile.Name)"
           "sln-file=$($slnFile.Name)" >> $env:GITHUB_OUTPUT
 
@@ -63,9 +63,9 @@ jobs:
         id: find-sln
         run: |
           echo "##[group]List solution files"
-          ls *.sln || true
+          ls *.slnx || true
           echo "##[endgroup]"
-          slnFile=$(ls *.sln | head -n 1)
+          slnFile=$(ls *.slnx | head -n 1)
           echo "Solution file found: $slnFile"
           echo "sln-file=$slnFile" >> $GITHUB_OUTPUT
 
