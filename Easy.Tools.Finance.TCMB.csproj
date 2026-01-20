@@ -1,0 +1,61 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<!--<TargetFrameworks>net10.0;net9.0;netstandard2.0;</TargetFrameworks>-->
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+
+		<!-- Deterministic + SourceLink -->
+		<Deterministic>true</Deterministic>
+		<DebugType>portable</DebugType>
+		<EmbedAllSources>true</EmbedAllSources>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<EnableSourceLink>true</EnableSourceLink>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<IncludeSymbols>true</IncludeSymbols>
+		<IncludeSource>true</IncludeSource>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+
+		<!-- Package Info -->
+		<Title>Easy.Tools.Finance.TCMB</Title>
+		<AssemblyTitle>Easy.Tools.Finance.TCMB</AssemblyTitle>
+		<AssemblyName>Easy.Tools.Finance.TCMB</AssemblyName>
+		<PackageId>Easy.Tools.Finance.TCMB</PackageId>
+		<Version>1.0.0</Version>
+		<Authors>Elmin Alirzayev</Authors>
+		<Company>Easy Code Tools</Company>
+		<Copyright>Copyright © Elmin Alirzayev 2025</Copyright>
+		<Description>A lightweight and resilient .NET library for fetching daily exchange rates from the Central Bank of the Republic of Turkey (TCMB). Features built-in retry mechanisms, type-safe models, and seamless Dependency Injection integration.</Description>
+		<PackageTags>tcmb central-bank turkey finance currency exchange-rates doviz kur altin forex banking xml resilience easy-tools</PackageTags>
+		<RepositoryUrl>https://github.com/elminalirzayev/Easy.Tools.Finance.TCMB</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/elminalirzayev/Easy.Tools.Finance.TCMB</PackageProjectUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageReleaseNotes>Initial release: Supports daily rate fetching, retry logic, and DI integration.</PackageReleaseNotes>
+
+		<!-- Build -->
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<!--<GenerateDocumentationFile>true</GenerateDocumentationFile>-->
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+		<LangVersion>latest</LangVersion>
+
+
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="README.md">
+			<Pack>true</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.2" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="10.0.2" />
+	</ItemGroup>
+
+</Project>
