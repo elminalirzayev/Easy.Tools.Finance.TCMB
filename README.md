@@ -65,7 +65,6 @@ var app = builder.Build();
 ```
 
 
-
 ### 2. Fetching Rates (Controller Example)
 
 Inject `ITcmbClient` into your controllers or services.
