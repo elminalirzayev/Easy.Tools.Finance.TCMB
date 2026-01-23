@@ -16,13 +16,13 @@
 
 Install via NuGet:
 
-```
+```bash
 dotnet add package Easy.Tools.Finance.TCMB
 ```
 
 Or via NuGet Package Manager:
 
-```
+```bash
 Install-Package Easy.Tools.Finance.TCMB
 ```
 

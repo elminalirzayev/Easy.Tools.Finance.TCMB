@@ -22,7 +22,8 @@
 		<AssemblyTitle>Easy.Tools.Finance.TCMB</AssemblyTitle>
 		<AssemblyName>Easy.Tools.Finance.TCMB</AssemblyName>
 		<PackageId>Easy.Tools.Finance.TCMB</PackageId>
-		<Version>1.0.1</Version>
+		<Version>1.0.2</Version>
+		<PackageIcon>icon.png</PackageIcon>
 		<Authors>Elmin Alirzayev</Authors>
 		<Company>Easy Code Tools</Company>
 		<Copyright>Copyright © Elmin Alirzayev 2025</Copyright>
@@ -33,10 +34,10 @@
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/elminalirzayev/Easy.Tools.Finance.TCMB</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageReleaseNotes>Initial release: Supports daily rate fetching, retry logic, and DI integration.</PackageReleaseNotes>
+		<PackageReleaseNotes>-</PackageReleaseNotes>
 
 		<!-- Build -->
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<NoWarn>$(NoWarn);1591</NoWarn>
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -50,6 +51,11 @@
 			<Pack>true</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
+		<None Include="icon.png">
+			<Pack>true</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		
 	</ItemGroup>
 
 	<ItemGroup>
