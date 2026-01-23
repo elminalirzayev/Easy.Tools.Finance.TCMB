@@ -1,5 +1,7 @@
 ﻿using Easy.Tools.Finance.TCMB.Models;
-
+#if NETFRAMEWORK
+using System.Net.Http;
+#endif
 namespace Easy.Tools.Finance.TCMB
 {
     /// <summary>

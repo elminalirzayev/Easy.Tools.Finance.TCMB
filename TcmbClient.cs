@@ -1,7 +1,9 @@
 ﻿using Easy.Tools.Finance.TCMB.Models;
 using Microsoft.Extensions.Options;
 using System.Xml.Serialization;
-
+#if NETFRAMEWORK
+using System.Net.Http;
+#endif
 namespace Easy.Tools.Finance.TCMB
 {
     /// <summary>
