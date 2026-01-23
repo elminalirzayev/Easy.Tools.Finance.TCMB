@@ -7,8 +7,9 @@
 
 # Easy.Tools.Finance.TCMB
 
-**Easy.Tools.Finance.TCMB, T.C. Merkez Bankası (TCMB) güncel döviz kurlarını çekmek için geliştirilmiş; kullanımı kolay, modern ve dayanıklı (resilient) bir .NET kütüphanesidir.
-**Easy.Tools.Finance.TCMB is a lightweight, modern, and resilient .NET library designed to fetch daily exchange rates from the Central Bank of the Republic of Turkey (TCMB).
+* **Easy.Tools.Finance.TCMB, T.C. Merkez Bankası (TCMB) güncel döviz kurlarını çekmek için geliştirilmiş; kullanımı kolay, modern ve dayanıklı (resilient) bir .NET kütüphanesidir.
+* **Easy.Tools.Finance.TCMB is a lightweight, modern, and resilient .NET library designed to fetch daily exchange rates from the Central Bank of the Republic of Turkey (TCMB).
+
 ---
 
 ## Installation
@@ -33,6 +34,7 @@ Install-Package Easy.Tools.Finance.TCMB
 * **Resilience (Retry Logic):** Includes built-in retry mechanisms to handle temporary network glitches or TCMB server timeouts.
 * **Type-Safe:** Automatically handles XML parsing and returns clean C# objects with `decimal` properties.
 * **Configurable:** Retry counts and delay durations are fully customizable via options.
+
 ---
 
 ## Usage
@@ -63,7 +65,6 @@ builder.Services.AddTcmbClient(options =>
 
 var app = builder.Build();
 ```
-
 
 
 ### 2. Fetching Rates (Controller Example)
@@ -103,6 +104,8 @@ public class CurrencyController : ControllerBase
     }
 }
 ```
+
+---
 
 ## Models
 
