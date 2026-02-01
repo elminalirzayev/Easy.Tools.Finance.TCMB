@@ -5,71 +5,65 @@
 [![License](https://img.shields.io/github/license/elminalirzayev/Easy.Tools.Finance.TCMB)](https://github.com/elminalirzayev/Easy.Tools.Finance.TCMB/blob/master/LICENSE.txt)
 [![NuGet](https://img.shields.io/nuget/v/Easy.Tools.Finance.TCMB.svg)](https://www.nuget.org/packages/Easy.Tools.Finance.TCMB)
 
-# Easy.Tools.Finance.TCMB
+#Easy.Tools.Finance.TCMB
 
-* **Easy.Tools.Finance.TCMB, T.C. Merkez Bankası (TCMB) güncel döviz kurlarını çekmek için geliştirilmiş; kullanımı kolay, modern ve dayanıklı (resilient) bir .NET kütüphanesidir.
-* **Easy.Tools.Finance.TCMB is a lightweight, modern, and resilient .NET library designed to fetch daily exchange rates from the Central Bank of the Republic of Turkey (TCMB).
+**Easy.Tools.Finance.TCMB** is a high-performance, enterprise-ready .NET library designed to fetch official exchange rates from the **Central Bank of the Republic of Turkey (TCMB/CBRT)**.
 
----
+It supports fetching both **daily** and **historical** rates, handles XML parsing efficiently, and includes built-in resilience mechanisms.
+
+
+##  Features
+
+- ** High Performance:** Uses **Static XML Serializer** caching to minimize memory pressure and prevent memory leaks.
+- ** Historical Data:** Built-in support for fetching rates from past dates (automatically handles TCMB's archive URL structure).
+- ** Resilience:** Built-in **Retry Policy** with exponential backoff for handling network glitches.
+- ** Culture Safe:** Parsing logic is strictly **Invariant Culture**, ensuring stability regardless of the server's regional settings.
+- ** Easy Integration:** Single-line integration with `IServiceCollection` (Dependency Injection).
+- ** Async & Cancellable:** Full support for `async/await` and `CancellationToken`.
+
 
 ## Installation
 
-Install via NuGet:
+Install via NuGet Package Manager:
+
+```powershell
+Install-Package Easy.Tools.Finance.TCMB
+```
+
+Or via .NET CLI:
 
 ```bash
 dotnet add package Easy.Tools.Finance.TCMB
 ```
 
-Or via NuGet Package Manager:
-
-```bash
-Install-Package Easy.Tools.Finance.TCMB
-```
-
----
-
-## Features
-
-* **Easy Integration:** Fully compatible with .NET Dependency Injection (DI).
-* **Resilience (Retry Logic):** Includes built-in retry mechanisms to handle temporary network glitches or TCMB server timeouts.
-* **Type-Safe:** Automatically handles XML parsing and returns clean C# objects with `decimal` properties.
-* **Configurable:** Retry counts and delay durations are fully customizable via options.
-
----
-
 ## Usage
 
 ### 1. Service Registration (Program.cs)
 
-Register the service in your `Program.cs`:
+Register the client in your `Program.cs`.
 
 ```csharp
-using Easy.Tools.Finance.TCMB.Extensions;
+using Easy.Tools.Finance.TCMB;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Standard registration:
+// 1. Standard Registration
 builder.Services.AddTcmbClient();
 
-// OR: Registration with custom options:
+// 2. OR: Advanced Configuration
 builder.Services.AddTcmbClient(options => 
 {
-    options.RetryCount = 5;         // Retry 5 times on failure
-    options.RetryDelaySeconds = 2;  // Wait 2 seconds between retries
-});
-//OR: Registration with custom TCMB Base URL (e.g., using a proxy or mirror):
-builder.Services.AddTcmbClient(options =>
-{
-    options.BaseUrl = "https://my-proxy-server.com/tcmb-mirror/";
+    options.RetryCount = 3;             // Retry 3 times
+    options.RetryDelaySeconds = 2;      // Wait 2 seconds
+    // options.BaseUrl = "...";         // Optional: Use a proxy URL
 });
 
 var app = builder.Build();
 ```
 
-
 ### 2. Fetching Rates (Controller Example)
 
-Inject `ITcmbClient` into your controllers or services.
+Inject `ITcmbClient` into your controllers.
 
 ```csharp
 using Easy.Tools.Finance.TCMB;
@@ -86,49 +80,62 @@ public class CurrencyController : ControllerBase
         _tcmbClient = tcmbClient;
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetRates()
+    [HttpGet("today")]
+    public async Task<IActionResult> GetTodayRates(CancellationToken cancellationToken)
     {
-        // Fetch all rates
-        var rates = await _tcmbClient.GetTodayRatesAsync();
+        // Fetch today's rates
+        var rates = await _tcmbClient.GetTodayRatesAsync(cancellationToken);
 
-        // Find USD Selling rate
-        var usdRate = rates.FirstOrDefault(x => x.Code == "USD")?.ForexSelling;
+        // Get USD and EUR
+        var usd = rates.FirstOrDefault(x => x.Code == "USD");
+        var eur = rates.FirstOrDefault(x => x.Code == "EUR");
 
-        return Ok(new 
-        { 
-            Message = "Rates fetched successfully", 
-            UsdSelling = usdRate,
-            AllRates = rates 
-        });
+        if (usd != null)
+            Console.WriteLine($"USD Selling: {usd.ForexSelling}");
+
+        return Ok(rates);
+    }
+
+    [HttpGet("history/{date}")]
+    public async Task<IActionResult> GetHistoryRates(DateTime date, CancellationToken cancellationToken)
+    {
+        // Fetch historical rates (e.g., 2023-05-15)
+        // The library automatically formats the URL to: .../202305/15052023.xml
+        var rates = await _tcmbClient.GetRatesByDateAsync(date, cancellationToken);
+
+        return Ok(rates);
     }
 }
 ```
 
----
 
 ## Models
 
-The package returns a list of `TcmbCurrency` objects. Key properties include:
+The package returns a list of `TcmbCurrency` objects.
 
--   `Code`: Currency code (e.g., USD, EUR).
-    
--   `CurrencyName`: Name of the currency (e.g., US DOLLAR).
-    
--   `ForexBuying`: Forex buying rate (Decimal).
-    
--   `ForexSelling`: Forex selling rate (Decimal).
-    
--   `BanknoteBuying`: Banknote buying rate.
-    
--   `BanknoteSelling`: Banknote selling rate
+| Property | Type | Description |
+| --- | --- | --- |
+| `Code` | `string` | Currency code (e.g., `USD`, `EUR`). |
+| `CurrencyName` | `string` | English name (e.g., `US DOLLAR`). |
+| `Name` | `string` | Turkish name (e.g., `ABD DOLARI`). |
+| `Unit` | `int` | Unit amount (e.g. `1` or `100`). |
+| `ForexBuying` | `decimal` | Forex (Döviz) buying rate. |
+| `ForexSelling` | `decimal` | Forex (Döviz) selling rate. |
+| `BanknoteBuying` | `decimal` | Banknote (Efektif) buying rate. |
+| `BanknoteSelling` | `decimal` | Banknote (Efektif) selling rate. |
 
+
+---
+
+## Contributing
+
+Contributions and suggestions are welcome. Please open an issue or submit a pull request.
 
 ---
 
 ## License
 
-MIT License.
+This project is licensed under the MIT License.
 
 ---
 

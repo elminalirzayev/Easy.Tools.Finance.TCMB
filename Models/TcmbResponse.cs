@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace Easy.Tools.Finance.TCMB.Models
+namespace Easy.Tools.Finance.TCMB
 {
     /// <summary>
     /// Root object representing the XML response from TCMB.

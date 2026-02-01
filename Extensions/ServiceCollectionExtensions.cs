@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using System;
 
-namespace Easy.Tools.Finance.TCMB.Extensions
+namespace Easy.Tools.Finance.TCMB
 {
     /// <summary>
     /// Extension methods for setting up TCMB Client in an IServiceCollection.
@@ -15,13 +17,21 @@ namespace Easy.Tools.Finance.TCMB.Extensions
         /// <returns>The IServiceCollection so that additional calls can be chained.</returns>
         public static IServiceCollection AddTcmbClient(this IServiceCollection services, Action<TcmbOptions>? configureOptions = null)
         {
-            services.AddHttpClient<ITcmbClient, TcmbClient>();
-
-            // Configure options if provided
+            // Configure options
             if (configureOptions != null)
             {
                 services.Configure(configureOptions);
             }
+
+            // Register HttpClient with Options
+            services.AddHttpClient<ITcmbClient, TcmbClient>((serviceProvider, client) =>
+            {
+                var options = serviceProvider.GetRequiredService<IOptions<TcmbOptions>>().Value;
+                if (!string.IsNullOrEmpty(options.BaseUrl))
+                {
+                    client.BaseAddress = new Uri(options.BaseUrl);
+                }
+            });
 
             return services;
         }

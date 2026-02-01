@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Xml.Serialization;
 
-namespace Easy.Tools.Finance.TCMB.Models
+namespace Easy.Tools.Finance.TCMB
 {
     /// <summary>
     /// Represents a single currency unit from TCMB XML data.
@@ -57,7 +57,7 @@ namespace Easy.Tools.Finance.TCMB.Models
         [XmlElement("BanknoteSelling")]
         public string? BanknoteSellingStr { get; set; }
 
-        // --- Helper Properties (Decimal) ---
+        // --- Optimized Helper Properties (Decimal) ---
 
         /// <summary>
         /// Forex Buying rate parsed as decimal.
@@ -83,11 +83,14 @@ namespace Easy.Tools.Finance.TCMB.Models
         [XmlIgnore]
         public decimal BanknoteSelling => ParseDecimal(BanknoteSellingStr);
 
-        private decimal ParseDecimal(string? val)
+        /// <summary>
+        /// Efficiently parses decimal using InvariantCulture.
+        /// </summary>
+        private static decimal ParseDecimal(string? val)
         {
-            if (string.IsNullOrWhiteSpace(val)) return 0;
-            // TCMB uses dot (.) as decimal separator. We use InvariantCulture to handle this safely.
-            return decimal.TryParse(val, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal result) ? result : 0;
+            if (string.IsNullOrWhiteSpace(val)) return 0m;
+            // TCMB uses dot (.) as decimal separator. InvariantCulture handles this safely.
+            return decimal.TryParse(val, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal result) ? result : 0m;
         }
     }
 }
